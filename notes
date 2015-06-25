@@ -1,0 +1,33 @@
+#get the list of the urls:
+#wget -qO- http://en.goear.com/search/alestorm%20shipwrecked | grep listen | egrep -o 'href="[^>]*' | sort -u | grep -o '".*"' | tr '"' ' ' | grep -v css
+
+#get soundid
+#wget -qO- http://en.goear.com/search/alestorm%20shipwrecked | grep listen | grep -o 'soundid="[^"]*"' | grep -o '".*"' | tr '"' ' '
+
+#get the corresponding list of titles:
+#wget -qO- http://en.goear.com/search/alestorm%20shipwrecked | grep listen | grep 'band_img' | grep -o 'title="[^"]*"' | grep -o '".*"' | tr '"' ' '
+
+#get the associated mp3 files
+#http://www.goear.com/action/sound/get/ +soundid
+
+encodeTitle(){
+	echo -ne $@ | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g'
+}
+
+searchMusic(){
+	wget -qO- http://en.goear.com/search/`encodeTitle $@` | grep listen | grep 'band_img' | grep -o 'title="[^"]*"' | grep -o '".*"' | sed -e s/\"//g
+}
+
+downloadByID(){
+	http://www.goear.com/action/sound/get/$1
+}
+
+getIDs(){
+	wget -qO- http://en.goear.com/search/`encodeTitle $@` | grep listen | grep -o 'soundid="[^"]*"' | grep -o '".*"' | sed -e s/\"//g
+}
+
+getID(){
+	getIDs | sed "$1q;d"
+}
+
+#TODO get data by index and then download by index
