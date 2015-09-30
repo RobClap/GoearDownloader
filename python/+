@@ -1,0 +1,27 @@
+from urllib.request import urlopen
+from html.parser import HTMLParser
+
+class MyHTMLParser(HTMLParser):
+    useful_data = False
+    code=""
+    def handle_starttag(self, tag, attrs):
+        try:
+            if (str(tag) == "ul" and dict(attrs)["class"] == "group board_content"):
+                self.useful_data=True
+                code=dict(attrs)["redir"]
+                print("Encountered a song: ", code)
+            break
+        except Error:
+            pass
+    def handle_endtag(self, tag):
+        if (str(tag) == "ul"):
+            self.useful_data=False
+            print("Encountered an end tag :", tag)
+    def handle_data(self, data):
+        if (self.useful_data==True):
+            print("Encountered some data  :", data)
+
+url="http://www.goear.com/search/ymca"
+data = urlopen(url).read()
+parser=MyHTMLParser()
+parser.feed(str(data))
