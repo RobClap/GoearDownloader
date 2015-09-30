@@ -25,7 +25,9 @@ class MyHTMLParser(HTMLParser):
         if (self.useful_data==True):
             if (len(self.state) > 3 and any(self.state in s for s in ["band","title","stats length","stats kbps hd", "stats kbps"])):
                 if self.state not in self.current_song :
-                    self.current_song[self.state] = data
+                    if(data!='\\n            '):
+                        self.current_song[self.state] = data
+
 
 #url="http://www.goear.com/search/ymca"
 #data = urlopen(url).read()
@@ -33,4 +35,15 @@ f = open("/home/rob/MyProjects/GoearDownloader/Audios y musica de ymca online.ht
 data=f.read().encode('ascii','ignore')
 parser=MyHTMLParser()
 parser.feed(str(data))
-print(parser.songs)
+
+import os 
+columnsize=int(os.get_terminal_size().columns/4)
+print( "Title".ljust(columnsize) + "Band".ljust(columnsize) + "Length".ljust(columnsize) + "Kbps")
+for song in parser.songs:
+    dsong=dict(song)
+    try:
+        print(dsong["title"].ljust(columnsize) + dsong["band"].ljust(columnsize) + dsong["stats length"].ljust(columnsize) + dsong["stats kbps"].ljust(columnsize))
+    except: 
+        try:
+            print(dsong["title"].ljust(columnsize) + dsong["band"].ljust(columnsize) + dsong["stats length"].ljust(columnsize) + dsong["stats kbps hd"])
+        except: pass
