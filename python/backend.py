@@ -2,7 +2,7 @@ import urllib.request
 import urllib
 from html.parser import HTMLParser
 
-
+#GOEAR
 class MyHTMLParser(HTMLParser):
     useful_data = False
     songs=[]
@@ -54,12 +54,20 @@ k=0
 for song in parser.songs:
     dsong=dict(song)
     try:
-        print(str(k).ljust(3) + " " + dsong["title"].ljust(columnsize) + dsong["band"].ljust(columnsize) + dsong["stats length"].ljust(columnsize) + dsong["stats kbps"].ljust(columnsize))
+        print(str(k).ljust(3) + " " + 
+                dsong["title"].ljust(columnsize)[0:columnsize-2] + 
+                dsong["band"].ljust(columnsize)[0:columnsize-2] + 
+                dsong["stats length"].ljust(columnsize)[0:columnsize-2] + 
+                dsong["stats kbps"].ljust(columnsize))
         #print("URL: " + dsong["url"])
         k+=1
     except: 
         try:
-            print(str(k).ljust(3) + " " + dsong["title"].ljust(columnsize) + dsong["band"].ljust(columnsize) + dsong["stats length"].ljust(columnsize) + dsong["stats kbps hd"])
+            print(str(k).ljust(3) + " " + 
+                    dsong["title"].ljust(columnsize)[0:columnsize-2] + 
+                    dsong["band"].ljust(columnsize)[0:columnsize-2] + 
+                    dsong["stats length"].ljust(columnsize)[0:columnsize-2] + 
+                    dsong["stats kbps hd"])
             #print("URL: " + dsong["url"])
             k+=1
         except: pass
